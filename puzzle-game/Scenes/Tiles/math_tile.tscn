@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://rrv1j5bwqxdv"]
+
+[ext_resource type="Script" uid="uid://b6cxi26of85pk" path="res://Scripts/Tiles/MathTile.cs" id="1_63ah2"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_e6cgf"]
+size = Vector2(30, 30)
+
+[node name="MathTile" type="Area2D" unique_id=1458591667]
+script = ExtResource("1_63ah2")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1113585689]
+custom_minimum_size = Vector2(240, 240)
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=121577957]
+position = Vector2(120, 120)
+shape = SubResource("RectangleShape2D_e6cgf")
+
+[node name="TileFunction" type="Label" parent="." unique_id=969259905]
+custom_minimum_size = Vector2(32, 32)
+offset_left = 32.0
+offset_top = 32.0
+offset_right = 96.0
+offset_bottom = 96.0
+text = "+1"
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -1,0 +1,111 @@
+[gd_scene format=3 uid="uid://d0wjl5mg43hl0"]
+
+[ext_resource type="PackedScene" uid="uid://cerlkuea483j7" path="res://Scenes/player.tscn" id="1_r150o"]
+[ext_resource type="PackedScene" uid="uid://gvgejbwdg6oh" path="res://Scenes/Tiles/GoalTile.tscn" id="2_kln2b"]
+[ext_resource type="PackedScene" uid="uid://rrv1j5bwqxdv" path="res://Scenes/Tiles/math_tile.tscn" id="3_kln2b"]
+
+[node name="Main" type="Node2D" unique_id=567901541]
+
+[node name="Tiles" type="Node" parent="." unique_id=420341397]
+
+[node name="MathTile" parent="Tiles" unique_id=1458591667 instance=ExtResource("3_kln2b")]
+position = Vector2(0, 240)
+
+[node name="MathTile2" parent="Tiles" unique_id=383206329 instance=ExtResource("3_kln2b")]
+
+[node name="MathTile3" parent="Tiles" unique_id=2145993145 instance=ExtResource("3_kln2b")]
+position = Vector2(240, 0)
+
+[node name="MathTile4" parent="Tiles" unique_id=1700459816 instance=ExtResource("3_kln2b")]
+position = Vector2(480, 0)
+
+[node name="MathTile5" parent="Tiles" unique_id=1725495618 instance=ExtResource("3_kln2b")]
+position = Vector2(720, 0)
+
+[node name="MathTile6" parent="Tiles" unique_id=1998097860 instance=ExtResource("3_kln2b")]
+position = Vector2(960, 0)
+
+[node name="MathTile7" parent="Tiles" unique_id=1424476198 instance=ExtResource("3_kln2b")]
+position = Vector2(1200, 0)
+
+[node name="MathTile8" parent="Tiles" unique_id=1370128854 instance=ExtResource("3_kln2b")]
+position = Vector2(1440, 0)
+
+[node name="MathTile9" parent="Tiles" unique_id=1453169804 instance=ExtResource("3_kln2b")]
+position = Vector2(1680, 0)
+
+[node name="MathTile10" parent="Tiles" unique_id=469178824 instance=ExtResource("3_kln2b")]
+position = Vector2(240, 240)
+
+[node name="MathTile11" parent="Tiles" unique_id=1581114323 instance=ExtResource("3_kln2b")]
+position = Vector2(480, 240)
+
+[node name="MathTile12" parent="Tiles" unique_id=306406732 instance=ExtResource("3_kln2b")]
+position = Vector2(720, 240)
+
+[node name="MathTile13" parent="Tiles" unique_id=1928224170 instance=ExtResource("3_kln2b")]
+position = Vector2(960, 240)
+
+[node name="MathTile14" parent="Tiles" unique_id=904203976 instance=ExtResource("3_kln2b")]
+position = Vector2(1680, 240)
+
+[node name="MathTile15" parent="Tiles" unique_id=2081425168 instance=ExtResource("3_kln2b")]
+position = Vector2(1440, 240)
+
+[node name="MathTile16" parent="Tiles" unique_id=836035609 instance=ExtResource("3_kln2b")]
+position = Vector2(1200, 240)
+
+[node name="MathTile17" parent="Tiles" unique_id=1254378484 instance=ExtResource("3_kln2b")]
+position = Vector2(0, 480)
+
+[node name="MathTile18" parent="Tiles" unique_id=1485331216 instance=ExtResource("3_kln2b")]
+position = Vector2(240, 480)
+
+[node name="MathTile19" parent="Tiles" unique_id=880921709 instance=ExtResource("3_kln2b")]
+position = Vector2(480, 480)
+
+[node name="MathTile20" parent="Tiles" unique_id=987660705 instance=ExtResource("3_kln2b")]
+position = Vector2(720, 480)
+
+[node name="MathTile21" parent="Tiles" unique_id=789635147 instance=ExtResource("3_kln2b")]
+position = Vector2(960, 480)
+
+[node name="MathTile22" parent="Tiles" unique_id=1950184600 instance=ExtResource("3_kln2b")]
+position = Vector2(1200, 480)
+
+[node name="MathTile23" parent="Tiles" unique_id=125160417 instance=ExtResource("3_kln2b")]
+position = Vector2(1440, 480)
+
+[node name="MathTile24" parent="Tiles" unique_id=447258093 instance=ExtResource("3_kln2b")]
+position = Vector2(1680, 480)
+
+[node name="MathTile25" parent="Tiles" unique_id=1146029046 instance=ExtResource("3_kln2b")]
+position = Vector2(0, 720)
+
+[node name="MathTile26" parent="Tiles" unique_id=218951723 instance=ExtResource("3_kln2b")]
+position = Vector2(240, 720)
+
+[node name="MathTile27" parent="Tiles" unique_id=1892368809 instance=ExtResource("3_kln2b")]
+position = Vector2(480, 720)
+
+[node name="MathTile28" parent="Tiles" unique_id=1055345568 instance=ExtResource("3_kln2b")]
+position = Vector2(720, 720)
+
+[node name="MathTile29" parent="Tiles" unique_id=834737445 instance=ExtResource("3_kln2b")]
+position = Vector2(960, 720)
+
+[node name="MathTile30" parent="Tiles" unique_id=2036009475 instance=ExtResource("3_kln2b")]
+position = Vector2(1200, 720)
+
+[node name="MathTile31" parent="Tiles" unique_id=27223676 instance=ExtResource("3_kln2b")]
+position = Vector2(1440, 720)
+
+[node name="GoalTile" parent="Tiles" unique_id=1458855450 instance=ExtResource("2_kln2b")]
+position = Vector2(1680, 720)
+
+[node name="GridDrawer" type="Node2D" parent="." unique_id=382553980]
+z_index = 9
+
+[node name="Player" parent="." unique_id=1156875533 instance=ExtResource("1_r150o")]
+z_index = 10
+levelModulo = 4
