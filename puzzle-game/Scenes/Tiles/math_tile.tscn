@@ -17,12 +17,14 @@ offset_bottom = 40.0
 position = Vector2(120, 120)
 shape = SubResource("RectangleShape2D_e6cgf")
 
-[node name="TileFunction" type="Label" parent="." unique_id=969259905]
+[node name="TileLabel" type="Label" parent="." unique_id=969259905]
 custom_minimum_size = Vector2(32, 32)
-offset_left = 32.0
-offset_top = 32.0
-offset_right = 96.0
-offset_bottom = 96.0
+offset_left = 62.0
+offset_top = 60.0
+offset_right = 182.0
+offset_bottom = 180.0
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 60
 text = "+1"
 horizontal_alignment = 1
 vertical_alignment = 1

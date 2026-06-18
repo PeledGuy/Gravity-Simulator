@@ -5,6 +5,15 @@ using System.Runtime.CompilerServices;
 
 public partial class Player : Area2D
 {
+	// Moves history for undoes
+	private class MoveState
+	{
+		public Vector2 oldPosition;
+		public int oldNumber;
+		public MathTile steppedTile;
+	}
+	private Stack<MoveState> moveHistory = new Stack<MoveState>();
+
 	// Modulo number related variables
 	[Export] public int levelModulo;
 	public int currentNumber = 1;
@@ -46,7 +55,17 @@ public partial class Player : Area2D
 		{
 			GetTree().ReloadCurrentScene();
 		}
+		if (Input.IsActionJustPressed("undo_move"))
+		{
+			UndoLastMove();
+		}
 
+		Move(delta);
+		
+	}
+
+	private void Move(double delta)
+	{
 		Vector2 direction = Vector2.Zero;
 
 		//Checking what direction to move the player
@@ -73,6 +92,7 @@ public partial class Player : Area2D
 			Vector2 targetPosition = Position + (direction * gridSize);
 			if (moveTimer <= 0f && legalMove(targetPosition))
 			{
+				SaveMoveState();
 				Position = targetPosition;
 				usedPositions.Add(Position);
 				moveTimer = moveDelay;
@@ -85,6 +105,41 @@ public partial class Player : Area2D
 		else
 		{
 			moveTimer = 0f;
+		}
+	}
+	
+	// Saving MoveState
+	private void SaveMoveState()
+	{
+		MoveState state = new MoveState
+		{
+			oldPosition = this.Position,
+			oldNumber = this.CurrentNumber,
+			steppedTile = null
+		};
+		moveHistory.Push(state);
+	}
+	public void RegisterSteppedTile(MathTile tile)
+	{
+		if (moveHistory.Count > 0)
+		{
+			moveHistory.Peek().steppedTile = tile;
+		}
+	}
+
+	// Undoing
+	private void UndoLastMove()
+	{
+		if (moveHistory.Count == 0) return;
+
+		usedPositions.Remove(Position);
+		MoveState previousState = moveHistory.Pop();
+		Position = previousState.oldPosition;
+		CurrentNumber = previousState.oldNumber;
+
+		if (previousState.steppedTile != null)
+		{
+			previousState.steppedTile.ResetTile();
 		}
 	}
 
