@@ -17,3 +17,10 @@ custom_minimum_size = Vector2(240, 240)
 offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0.4, 1, 0, 1)
+
+[node name="ReferenceRect" type="ReferenceRect" parent="." unique_id=548098788]
+offset_right = 240.0
+offset_bottom = 240.0
+border_color = Color(0, 0, 0, 0.47058824)
+border_width = 2.0
+editor_only = false

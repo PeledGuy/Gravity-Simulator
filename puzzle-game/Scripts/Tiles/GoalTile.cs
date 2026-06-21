@@ -3,13 +3,18 @@ using System;
 
 public partial class GoalTile : Tile
 {
-    public override void OnPlayerStep(Player player)
+    public async override void OnPlayerStep(Player player)
     {
         int finalNumber = player.currentNumber % player.levelModulo;
 
 		if (finalNumber == 0)
 		{
-			GD.Print("You win!");
+			WinScreen winUI = GetTree().GetFirstNodeInGroup("WinScreen") as WinScreen;
+			if (winUI != null)
+			{
+				await ToSignal(GetTree().CreateTimer(0.05f), SceneTreeTimer.SignalName.Timeout);
+				winUI.ShowWin();
+			}
 		}
 		else
 		{

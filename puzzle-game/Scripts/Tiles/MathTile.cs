@@ -1,6 +1,7 @@
 using Godot;
 using System;
 
+[Tool]
 public partial class MathTile : Tile
 {
     public enum MathOp
@@ -8,24 +9,49 @@ public partial class MathTile : Tile
         Add,
         Subtract,
         Multiply,
-        Divide
+        Divide,
+        None
     }
 
-    [Export] public MathOp Operation = MathOp.Add;
-	[Export] public int value = 1;
-    
+    private MathOp operation;
+    [Export] public MathOp Operation
+    {
+        get => operation;
+        set
+        {
+            operation = value;
+            UpdateText();
+        }
+    }
+	private int numberValue = 1;
+    [Export] public int NumberValue
+    {
+        get => numberValue;
+        set
+        {
+            numberValue = value;
+            UpdateText();
+        }
+    }
+    private Label mathLabel;
+
     private bool isUsed = false;
+
+    private Color fadeColor = new Color(0.2f, 0.2f, 0.2f, 0.9f);
+    private Color originalModulate;
 
     public override void _Ready()
     {
-        Label myLabel = GetNode<Label>("TileLabel");
+		
+        if (HasNode("TileLabel"))
+        {
+            mathLabel = GetNode<Label>("TileLabel");
+        }
+        UpdateText();
 
-        string symbol = "+";
-        if (Operation == MathOp.Subtract) symbol = "-";
-        else if (Operation == MathOp.Multiply) symbol = "x";
-        else if (Operation == MathOp.Divide) symbol = "/";
+        originalModulate = Modulate;
 
-        myLabel.Text = $"{symbol}{value}";
+        if (Engine.IsEditorHint()) return;
     }
 
 
@@ -37,29 +63,42 @@ public partial class MathTile : Tile
 
         switch (Operation)
         {
+            case MathOp.None:
+                break;
             case MathOp.Add:
-                player.CurrentNumber += value;
+                player.CurrentNumber += numberValue;
                 break;
             case MathOp.Subtract:
-                player.CurrentNumber -= value;
+                player.CurrentNumber -= numberValue;
                 break;
             case MathOp.Multiply:
-                player.CurrentNumber *= value;
+                player.CurrentNumber *= numberValue;
                 break;
             case MathOp.Divide:
-                if (value != 0)
+                if (numberValue != 0)
                 {
-                player.CurrentNumber /= value;
+                player.CurrentNumber /= numberValue;
                 }
                 break;
         }
+
+        MarkAsUsed(player);
         
+    }
+
+    public void MarkAsUsed(Player player)
+    {
+        //Graying out the tile
+        Tween tween = CreateTween();
+        tween.TweenProperty(this, "modulate", fadeColor, 0.15f)
+            .SetTrans(Tween.TransitionType.Sine)
+            .SetEase(Tween.EaseType.Out);
+
         // Graying out the operation number
-        Label myLabel = GetNodeOrNull<Label>("TileLabel");
-        if (myLabel != null)
+        if (mathLabel != null)
         {
-            myLabel.AddThemeColorOverride("font_color", Colors.Gray);
-            myLabel.Modulate = new Color(1, 1, 1, 0.5f);
+            mathLabel.AddThemeColorOverride("font_color", Colors.Gray);
+            mathLabel.Modulate = new Color(1, 1, 1, 0.8f);
         }
         player.RegisterSteppedTile(this);
     }
@@ -69,12 +108,44 @@ public partial class MathTile : Tile
     {
         isUsed = false;
 
-        Label myLabel = GetNodeOrNull<Label>("TileLabel");
-        if (myLabel != null)
+        Tween tween = CreateTween();
+        tween.TweenProperty(this, "modulate", originalModulate, 0.15f)
+             .SetTrans(Tween.TransitionType.Sine)
+             .SetEase(Tween.EaseType.Out);
+
+        if (mathLabel != null)
         {
-            myLabel.AddThemeColorOverride("font_color", Colors.Black);
-            myLabel.Modulate = new Color(1, 1, 1, 1f);
+            mathLabel.AddThemeColorOverride("font_color", Colors.Black);
+            mathLabel.Modulate = new Color(1, 1, 1, 1f);
 
         }
+    }
+
+    private void UpdateText()
+    {
+        if (mathLabel == null)
+        {
+            if (IsInsideTree() && HasNode("TileLabel"))
+            {
+                mathLabel = GetNode<Label>("TileLabel");
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        if (Operation == MathOp.None)
+        {
+            mathLabel.Text = "";
+            return;
+        }
+
+        string symbol = "+";
+        if (Operation == MathOp.Subtract) symbol = "-";
+        else if (Operation == MathOp.Multiply) symbol = "x";
+        else if (Operation == MathOp.Divide) symbol = "/";
+
+        mathLabel.Text = $"{symbol}{numberValue}";
     }
 }

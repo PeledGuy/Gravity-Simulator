@@ -1,0 +1,56 @@
+[gd_scene format=3 uid="uid://c26r7ybh1wfbj"]
+
+[ext_resource type="PackedScene" uid="uid://byfltluwkcabr" path="res://Scenes/Levels/LevelTemplate.tscn" id="1_ol07m"]
+[ext_resource type="PackedScene" uid="uid://rrv1j5bwqxdv" path="res://Scenes/Tiles/math_tile.tscn" id="2_3fb31"]
+[ext_resource type="PackedScene" uid="uid://gvgejbwdg6oh" path="res://Scenes/Tiles/GoalTile.tscn" id="3_k60p8"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r018i"]
+size = Vector2(1920, 360)
+
+[node name="1_1" unique_id=262713590 instance=ExtResource("1_ol07m")]
+
+[node name="Background" parent="." index="0" unique_id=2137474623]
+offset_top = 120.0
+
+[node name="MathTile1" parent="Tiles" parent_id_path=PackedInt32Array(1917193850) index="0" unique_id=1458591667 instance=ExtResource("2_3fb31")]
+position = Vector2(0, 480)
+Operation = 4
+
+[node name="MathTile2" parent="Tiles" parent_id_path=PackedInt32Array(1917193850) index="1" unique_id=1872295425 instance=ExtResource("2_3fb31")]
+position = Vector2(240, 480)
+Operation = 4
+
+[node name="MathTile3" parent="Tiles" parent_id_path=PackedInt32Array(1917193850) index="2" unique_id=960873020 instance=ExtResource("2_3fb31")]
+position = Vector2(480, 480)
+
+[node name="MathTile4" parent="Tiles" parent_id_path=PackedInt32Array(1917193850) index="3" unique_id=241758415 instance=ExtResource("2_3fb31")]
+position = Vector2(720, 480)
+Operation = 4
+NumberValue = 0
+
+[node name="MathTile5" parent="Tiles" parent_id_path=PackedInt32Array(1917193850) index="4" unique_id=943929186 instance=ExtResource("2_3fb31")]
+position = Vector2(960, 480)
+Operation = 4
+
+[node name="MathTile6" parent="Tiles" parent_id_path=PackedInt32Array(1917193850) index="5" unique_id=359644093 instance=ExtResource("2_3fb31")]
+position = Vector2(1200, 480)
+
+[node name="MathTile7" parent="Tiles" parent_id_path=PackedInt32Array(1917193850) index="6" unique_id=1341698617 instance=ExtResource("2_3fb31")]
+position = Vector2(1440, 480)
+Operation = 4
+
+[node name="GoalTile8" parent="Tiles" parent_id_path=PackedInt32Array(1917193850) index="7" unique_id=1195955781 instance=ExtResource("3_k60p8")]
+position = Vector2(1680, 480)
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Borders" parent_id_path=PackedInt32Array(1148826855) index="0" unique_id=184542552]
+position = Vector2(960, 900)
+shape = SubResource("RectangleShape2D_r018i")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="Borders" parent_id_path=PackedInt32Array(1148826855) index="1" unique_id=442465562]
+position = Vector2(960, 300)
+shape = SubResource("RectangleShape2D_r018i")
+
+[node name="Player" parent="." index="3" unique_id=1156875533]
+position = Vector2(120, 600)
+levelModulo = 3
+StartPosition = Vector2(120, 600)

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
+[Tool]
 public partial class Player : Area2D
 {
 	// Moves history for undoes
@@ -12,10 +13,19 @@ public partial class Player : Area2D
 		public int oldNumber;
 		public MathTile steppedTile;
 	}
+
+	// Signals
+	[Signal]
+	public delegate void PlayerMovedEventHandler();
+	[Signal]
+	public delegate void PlayerUndidMoveEventHandler();
+
+
 	private Stack<MoveState> moveHistory = new Stack<MoveState>();
 
 	// Modulo number related variables
 	[Export] public int levelModulo;
+	private ClockUi clockUI;
 	public int currentNumber = 1;
 	public int CurrentNumber
 	{
@@ -23,34 +33,49 @@ public partial class Player : Area2D
 		set
 		{
 			currentNumber = value;
-			UpdateLabel();
+			UpdateUI();
 		}
 	}
-	[Export] public Label numberLabel;
 
 
 	// Movement related variables
 	[Export] public int gridSize = 240;
-	[Export] public float maxX = 1920;
-	[Export] public float minX = 0;
-	[Export] public float maxY = 960;
-	[Export] public float minY = 0;
+	private Vector2 startPosition;
+	[Export]
+	public Vector2 StartPosition
+	{
+		get => startPosition;
+		set
+		{
+			startPosition = value;
+			Position = startPosition;
+		}
+	}
 	private List<Vector2> usedPositions = new List<Vector2>();
 	[Export] public float moveDelay = 0.15f;
-	private float moveTimer = 0f;
+	private bool isMoving = false;
+
+	private RayCast2D rayCast;
 
 
 	public override void _Ready()
 	{
-		//Set player position and set starting label
-		Position = new Vector2(1080,600);
+		if (Engine.IsEditorHint()) return;
+
+		//Set player position and set starting clock
+		clockUI = GetTree().GetFirstNodeInGroup("ClockUI") as ClockUi;
+		rayCast = GetNode<RayCast2D>("RayCast2D");
+
+		Position = startPosition	;
 		usedPositions.Add(Position);
-		UpdateLabel();
+		UpdateUI();
 	}
 
 	// Called every frame. 'delta' is the elapsed time since the previous frame.
 	public override void _Process(double delta)
 	{
+		if (Engine.IsEditorHint()) return;
+
 		if (Input.IsActionJustPressed("restart_level"))
 		{
 			GetTree().ReloadCurrentScene();
@@ -87,24 +112,28 @@ public partial class Player : Area2D
 		}
 
 		//Controlling move timer and deciding if to move
-		if (direction != Vector2.Zero)
+		if (direction != Vector2.Zero && !isMoving)
 		{
+			rayCast.TargetPosition = direction * gridSize;
+			rayCast.ForceRaycastUpdate();
+
+			if (rayCast.IsColliding()) return;
+
 			Vector2 targetPosition = Position + (direction * gridSize);
-			if (moveTimer <= 0f && legalMove(targetPosition))
+			if (legalMove(targetPosition))
 			{
+				isMoving = true;
+				EmitSignal(SignalName.PlayerMoved);
 				SaveMoveState();
-				Position = targetPosition;
-				usedPositions.Add(Position);
-				moveTimer = moveDelay;
+				usedPositions.Add(targetPosition);
+				
+				Tween tween = CreateTween();
+				tween.TweenProperty(this, "position", targetPosition, moveDelay)
+					.SetTrans(Tween.TransitionType.Sine)
+					.SetEase(Tween.EaseType.Out);
+				
+				tween.Finished += () => isMoving = false;
 			}
-			else
-			{
-				moveTimer -= (float)delta;
-			}
-		}
-		else
-		{
-			moveTimer = 0f;
 		}
 	}
 	
@@ -141,21 +170,15 @@ public partial class Player : Area2D
 		{
 			previousState.steppedTile.ResetTile();
 		}
+
+		EmitSignal(SignalName.PlayerUndidMove);
 	}
 
 	// Checking if a move is legal
 	private bool legalMove(Vector2 targetPosition)
 	{
-		bool legal = true;
-		if (usedPositions.Contains(targetPosition))
-		{
-			legal = false;
-		}
-		if (targetPosition.X >= maxX || targetPosition.Y >= maxY || targetPosition.X <= minX || targetPosition.Y <= minY)
-		{
-			legal = false;
-		}
-		return legal;
+		if (usedPositions.Contains(targetPosition)) return false;
+		return true;
 	}
 	
 	public void EraseCurrentFootprint()
@@ -163,12 +186,12 @@ public partial class Player : Area2D
 		usedPositions.Remove(Position);
 	}
 
-	// Updating the number label
-	private void UpdateLabel()
+	// Updating the clock
+	private void UpdateUI()
 	{
-		if (numberLabel != null)
+		if (clockUI != null)
 		{
-			numberLabel.Text = (currentNumber % levelModulo).ToString();
+			clockUI.UpdateClock(CurrentNumber, levelModulo);
 		}
 	}
 
